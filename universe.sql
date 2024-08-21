@@ -44,6 +44,43 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: comet; Type: TABLE; Schema: public; Owner: freecodecamp
+--
+
+CREATE TABLE public.comet (
+    comet_id integer NOT NULL,
+    name character varying(30) NOT NULL,
+    mass numeric,
+    tail_length integer,
+    is_periodic boolean NOT NULL
+);
+
+
+ALTER TABLE public.comet OWNER TO freecodecamp;
+
+--
+-- Name: comet_comet_id_seq; Type: SEQUENCE; Schema: public; Owner: freecodecamp
+--
+
+CREATE SEQUENCE public.comet_comet_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.comet_comet_id_seq OWNER TO freecodecamp;
+
+--
+-- Name: comet_comet_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: freecodecamp
+--
+
+ALTER SEQUENCE public.comet_comet_id_seq OWNED BY public.comet.comet_id;
+
+
+--
 -- Name: galaxy; Type: TABLE; Schema: public; Owner: freecodecamp
 --
 
@@ -117,19 +154,6 @@ ALTER TABLE public.moon_moon_id_seq OWNER TO freecodecamp;
 
 ALTER SEQUENCE public.moon_moon_id_seq OWNED BY public.moon.moon_id;
 
-
---
--- Name: orbit; Type: TABLE; Schema: public; Owner: freecodecamp
---
-
-CREATE TABLE public.orbit (
-    planet_id integer NOT NULL,
-    moon_id integer NOT NULL,
-    type_orbit character varying(30)
-);
-
-
-ALTER TABLE public.orbit OWNER TO freecodecamp;
 
 --
 -- Name: planet; Type: TABLE; Schema: public; Owner: freecodecamp
@@ -206,6 +230,13 @@ ALTER SEQUENCE public.star_star_id_seq OWNED BY public.star.star_id;
 
 
 --
+-- Name: comet comet_id; Type: DEFAULT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.comet ALTER COLUMN comet_id SET DEFAULT nextval('public.comet_comet_id_seq'::regclass);
+
+
+--
 -- Name: galaxy galaxy_id; Type: DEFAULT; Schema: public; Owner: freecodecamp
 --
 
@@ -231,6 +262,15 @@ ALTER TABLE ONLY public.planet ALTER COLUMN planet_id SET DEFAULT nextval('publi
 --
 
 ALTER TABLE ONLY public.star ALTER COLUMN star_id SET DEFAULT nextval('public.star_star_id_seq'::regclass);
+
+
+--
+-- Data for Name: comet; Type: TABLE DATA; Schema: public; Owner: freecodecamp
+--
+
+INSERT INTO public.comet VALUES (1, 'Halley', 2.2, 24000000, true);
+INSERT INTO public.comet VALUES (2, 'Hale-Bopp', 2.6, 120000000, true);
+INSERT INTO public.comet VALUES (3, 'Swift-Tuttle', 1.0, 100000000, true);
 
 
 --
@@ -272,32 +312,6 @@ INSERT INTO public.moon VALUES (20, 'Mimas', 0.0003, false, 185520, 4);
 
 
 --
--- Data for Name: orbit; Type: TABLE DATA; Schema: public; Owner: freecodecamp
---
-
-INSERT INTO public.orbit VALUES (1, 1, 'Elliptical');
-INSERT INTO public.orbit VALUES (2, 2, 'Circular');
-INSERT INTO public.orbit VALUES (2, 3, 'Elliptical');
-INSERT INTO public.orbit VALUES (3, 4, 'Elliptical');
-INSERT INTO public.orbit VALUES (3, 5, 'Circular');
-INSERT INTO public.orbit VALUES (3, 6, 'Elliptical');
-INSERT INTO public.orbit VALUES (3, 7, 'Circular');
-INSERT INTO public.orbit VALUES (4, 8, 'Elliptical');
-INSERT INTO public.orbit VALUES (4, 9, 'Circular');
-INSERT INTO public.orbit VALUES (4, 10, 'Elliptical');
-INSERT INTO public.orbit VALUES (4, 11, 'Circular');
-INSERT INTO public.orbit VALUES (5, 12, 'Elliptical');
-INSERT INTO public.orbit VALUES (5, 13, 'Circular');
-INSERT INTO public.orbit VALUES (5, 14, 'Elliptical');
-INSERT INTO public.orbit VALUES (6, 15, 'Elliptical');
-INSERT INTO public.orbit VALUES (6, 16, 'Elliptical');
-INSERT INTO public.orbit VALUES (6, 17, 'Circular');
-INSERT INTO public.orbit VALUES (6, 18, 'Elliptical');
-INSERT INTO public.orbit VALUES (6, 19, 'Circular');
-INSERT INTO public.orbit VALUES (4, 20, 'Elliptical');
-
-
---
 -- Data for Name: planet; Type: TABLE DATA; Schema: public; Owner: freecodecamp
 --
 
@@ -328,6 +342,13 @@ INSERT INTO public.star VALUES (10, 'Vega', 2.3, 455, 2);
 
 
 --
+-- Name: comet_comet_id_seq; Type: SEQUENCE SET; Schema: public; Owner: freecodecamp
+--
+
+SELECT pg_catalog.setval('public.comet_comet_id_seq', 3, true);
+
+
+--
 -- Name: galaxy_galaxy_id_seq; Type: SEQUENCE SET; Schema: public; Owner: freecodecamp
 --
 
@@ -353,6 +374,22 @@ SELECT pg_catalog.setval('public.planet_planet_id_seq', 12, true);
 --
 
 SELECT pg_catalog.setval('public.star_star_id_seq', 10, true);
+
+
+--
+-- Name: comet comet_name_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.comet
+    ADD CONSTRAINT comet_name_key UNIQUE (name);
+
+
+--
+-- Name: comet comet_pkey; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.comet
+    ADD CONSTRAINT comet_pkey PRIMARY KEY (comet_id);
 
 
 --
