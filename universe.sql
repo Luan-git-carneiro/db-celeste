@@ -44,46 +44,6 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: comet; Type: TABLE; Schema: public; Owner: freecodecamp
---
-
-CREATE TABLE public.comet (
-    comet_id integer NOT NULL,
-    name character varying(30) NOT NULL,
-    mass numeric,
-    tail_length integer,
-    is_periodic boolean NOT NULL,
-    ciclo_por_ano integer,
-    description text,
-    extra_int integer
-);
-
-
-ALTER TABLE public.comet OWNER TO freecodecamp;
-
---
--- Name: comet_comet_id_seq; Type: SEQUENCE; Schema: public; Owner: freecodecamp
---
-
-CREATE SEQUENCE public.comet_comet_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.comet_comet_id_seq OWNER TO freecodecamp;
-
---
--- Name: comet_comet_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: freecodecamp
---
-
-ALTER SEQUENCE public.comet_comet_id_seq OWNED BY public.comet.comet_id;
-
-
---
 -- Name: galaxy; Type: TABLE; Schema: public; Owner: freecodecamp
 --
 
@@ -161,6 +121,43 @@ ALTER TABLE public.moon_moon_id_seq OWNER TO freecodecamp;
 --
 
 ALTER SEQUENCE public.moon_moon_id_seq OWNED BY public.moon.moon_id;
+
+
+--
+-- Name: orbit; Type: TABLE; Schema: public; Owner: freecodecamp
+--
+
+CREATE TABLE public.orbit (
+    planet_id integer NOT NULL,
+    moon_id integer NOT NULL,
+    type_orbit character varying(30),
+    orbit_id integer NOT NULL,
+    name character varying(30)
+);
+
+
+ALTER TABLE public.orbit OWNER TO freecodecamp;
+
+--
+-- Name: orbit_orbit_id_seq; Type: SEQUENCE; Schema: public; Owner: freecodecamp
+--
+
+CREATE SEQUENCE public.orbit_orbit_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.orbit_orbit_id_seq OWNER TO freecodecamp;
+
+--
+-- Name: orbit_orbit_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: freecodecamp
+--
+
+ALTER SEQUENCE public.orbit_orbit_id_seq OWNED BY public.orbit.orbit_id;
 
 
 --
@@ -244,13 +241,6 @@ ALTER SEQUENCE public.star_star_id_seq OWNED BY public.star.star_id;
 
 
 --
--- Name: comet comet_id; Type: DEFAULT; Schema: public; Owner: freecodecamp
---
-
-ALTER TABLE ONLY public.comet ALTER COLUMN comet_id SET DEFAULT nextval('public.comet_comet_id_seq'::regclass);
-
-
---
 -- Name: galaxy galaxy_id; Type: DEFAULT; Schema: public; Owner: freecodecamp
 --
 
@@ -265,6 +255,13 @@ ALTER TABLE ONLY public.moon ALTER COLUMN moon_id SET DEFAULT nextval('public.mo
 
 
 --
+-- Name: orbit orbit_id; Type: DEFAULT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.orbit ALTER COLUMN orbit_id SET DEFAULT nextval('public.orbit_orbit_id_seq'::regclass);
+
+
+--
 -- Name: planet planet_id; Type: DEFAULT; Schema: public; Owner: freecodecamp
 --
 
@@ -276,19 +273,6 @@ ALTER TABLE ONLY public.planet ALTER COLUMN planet_id SET DEFAULT nextval('publi
 --
 
 ALTER TABLE ONLY public.star ALTER COLUMN star_id SET DEFAULT nextval('public.star_star_id_seq'::regclass);
-
-
---
--- Data for Name: comet; Type: TABLE DATA; Schema: public; Owner: freecodecamp
---
-
-INSERT INTO public.comet VALUES (1, 'Halley', 2.2, 24000000, true, NULL, NULL, NULL);
-INSERT INTO public.comet VALUES (2, 'Hale-Bopp', 2.6, 120000000, true, NULL, NULL, NULL);
-INSERT INTO public.comet VALUES (3, 'Swift-Tuttle', 1.0, 100000000, true, NULL, NULL, NULL);
-INSERT INTO public.comet VALUES (5, 'Encke', 0.8, 90000, true, NULL, 'A periodic comet with a short orbital period.', 4);
-INSERT INTO public.comet VALUES (6, 'McNaught', 0.7, 85000, true, NULL, 'A bright comet seen in 2007.', 5);
-INSERT INTO public.comet VALUES (7, 'Giacobini-Zinner', 0.9, 95000, true, NULL, 'A periodic comet known for its bright tail.', 6);
-INSERT INTO public.comet VALUES (8, 'Ikeya-Seki', 0.8, 75000, false, NULL, 'A famous non-periodic comet.', 7);
 
 
 --
@@ -333,24 +317,35 @@ INSERT INTO public.moon VALUES (20, 'Mimas', 0.0003, false, 185520, 4, NULL, NUL
 
 
 --
+-- Data for Name: orbit; Type: TABLE DATA; Schema: public; Owner: freecodecamp
+--
+
+INSERT INTO public.orbit VALUES (1, 1, 'Elliptical', 1, NULL);
+INSERT INTO public.orbit VALUES (2, 2, 'Circular', 2, NULL);
+INSERT INTO public.orbit VALUES (3, 4, 'Elliptical', 3, 'Elliptical Orbit of Moon 4');
+INSERT INTO public.orbit VALUES (5, 10, 'Circular', 4, 'Circular Orbit of Moon 10');
+INSERT INTO public.orbit VALUES (6, 15, 'Elliptical', 5, 'Elliptical Orbit of Moon 15');
+
+
+--
 -- Data for Name: planet; Type: TABLE DATA; Schema: public; Owner: freecodecamp
 --
 
-INSERT INTO public.planet VALUES (1, 'Mercury', 'Terrestrial', false, 1, NULL, NULL, NULL);
-INSERT INTO public.planet VALUES (2, 'Venus', 'Terrestrial', false, 1, NULL, NULL, NULL);
-INSERT INTO public.planet VALUES (3, 'Earth', 'Terrestrial', true, 1, NULL, NULL, NULL);
-INSERT INTO public.planet VALUES (4, 'Mars', 'Terrestrial', false, 1, NULL, NULL, NULL);
-INSERT INTO public.planet VALUES (5, 'Jupiter', 'Gas Giant', false, 1, NULL, NULL, NULL);
-INSERT INTO public.planet VALUES (6, 'Saturn', 'Gas Giant', false, 1, NULL, NULL, NULL);
-INSERT INTO public.planet VALUES (7, 'Uranus', 'Ice Giant', false, 1, NULL, NULL, NULL);
-INSERT INTO public.planet VALUES (8, 'Neptune', 'Ice Giant', false, 1, NULL, NULL, NULL);
-INSERT INTO public.planet VALUES (9, 'Proxima b', 'Terrestrial', true, 4, NULL, NULL, NULL);
-INSERT INTO public.planet VALUES (10, 'Proxima c', 'Gas Giant', false, 4, NULL, NULL, NULL);
-INSERT INTO public.planet VALUES (11, 'Sirius b', 'Terrestrial', false, 2, NULL, NULL, NULL);
-INSERT INTO public.planet VALUES (12, 'Sirius c', 'Gas Giant', false, 2, NULL, NULL, NULL);
-INSERT INTO public.planet VALUES (13, 'Kepler-22b', 'Super-Earth', true, 11, NULL, 'An exoplanet located in the habitable zone of its star.', 13);
-INSERT INTO public.planet VALUES (14, 'HD 209458 b', 'Hot Jupiter', false, 12, NULL, 'A gas giant exoplanet known for its high temperatures.', 14);
-INSERT INTO public.planet VALUES (15, 'Gliese 581 g', 'Super-Earth', true, 13, NULL, 'An exoplanet in the habitable zone of its star.', 15);
+INSERT INTO public.planet VALUES (14, 'HD 209458 b', 'Hot Jupiter', false, 10, NULL, 'A gas giant exoplanet known for its high temperatures.', 14);
+INSERT INTO public.planet VALUES (15, 'Gliese 581 g', 'Super-Earth', true, 10, NULL, 'An exoplanet in the habitable zone of its star.', 15);
+INSERT INTO public.planet VALUES (9, 'Proxima b', 'Terrestrial', true, 5, NULL, NULL, NULL);
+INSERT INTO public.planet VALUES (10, 'Proxima c', 'Gas Giant', false, 5, NULL, NULL, NULL);
+INSERT INTO public.planet VALUES (1, 'Mercury', 'Terrestrial', false, 5, NULL, NULL, NULL);
+INSERT INTO public.planet VALUES (2, 'Venus', 'Terrestrial', false, 5, NULL, NULL, NULL);
+INSERT INTO public.planet VALUES (3, 'Earth', 'Terrestrial', true, 5, NULL, NULL, NULL);
+INSERT INTO public.planet VALUES (4, 'Mars', 'Terrestrial', false, 5, NULL, NULL, NULL);
+INSERT INTO public.planet VALUES (5, 'Jupiter', 'Gas Giant', false, 5, NULL, NULL, NULL);
+INSERT INTO public.planet VALUES (6, 'Saturn', 'Gas Giant', false, 5, NULL, NULL, NULL);
+INSERT INTO public.planet VALUES (7, 'Uranus', 'Ice Giant', false, 5, NULL, NULL, NULL);
+INSERT INTO public.planet VALUES (8, 'Neptune', 'Ice Giant', false, 5, NULL, NULL, NULL);
+INSERT INTO public.planet VALUES (11, 'Sirius b', 'Terrestrial', false, 7, NULL, NULL, NULL);
+INSERT INTO public.planet VALUES (12, 'Sirius c', 'Gas Giant', false, 7, NULL, NULL, NULL);
+INSERT INTO public.planet VALUES (13, 'Kepler-22b', 'Super-Earth', true, 10, NULL, 'An exoplanet located in the habitable zone of its star.', 13);
 
 
 --
@@ -363,13 +358,6 @@ INSERT INTO public.star VALUES (7, 'Betelgeuse', 20.0, 8700, 3, NULL, NULL, NULL
 INSERT INTO public.star VALUES (8, 'Proxima Centauri', 0.12, 4700, 1, NULL, NULL, NULL);
 INSERT INTO public.star VALUES (9, 'Rigel', 18.0, 8000, 4, NULL, NULL, NULL);
 INSERT INTO public.star VALUES (10, 'Vega', 2.3, 455, 2, NULL, NULL, NULL);
-
-
---
--- Name: comet_comet_id_seq; Type: SEQUENCE SET; Schema: public; Owner: freecodecamp
---
-
-SELECT pg_catalog.setval('public.comet_comet_id_seq', 9, true);
 
 
 --
@@ -387,6 +375,13 @@ SELECT pg_catalog.setval('public.moon_moon_id_seq', 23, true);
 
 
 --
+-- Name: orbit_orbit_id_seq; Type: SEQUENCE SET; Schema: public; Owner: freecodecamp
+--
+
+SELECT pg_catalog.setval('public.orbit_orbit_id_seq', 2, true);
+
+
+--
 -- Name: planet_planet_id_seq; Type: SEQUENCE SET; Schema: public; Owner: freecodecamp
 --
 
@@ -398,22 +393,6 @@ SELECT pg_catalog.setval('public.planet_planet_id_seq', 15, true);
 --
 
 SELECT pg_catalog.setval('public.star_star_id_seq', 10, true);
-
-
---
--- Name: comet comet_name_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
---
-
-ALTER TABLE ONLY public.comet
-    ADD CONSTRAINT comet_name_key UNIQUE (name);
-
-
---
--- Name: comet comet_pkey; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
---
-
-ALTER TABLE ONLY public.comet
-    ADD CONSTRAINT comet_pkey PRIMARY KEY (comet_id);
 
 
 --
@@ -449,6 +428,14 @@ ALTER TABLE ONLY public.moon
 
 
 --
+-- Name: orbit orbit_pkey; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.orbit
+    ADD CONSTRAINT orbit_pkey PRIMARY KEY (orbit_id);
+
+
+--
 -- Name: planet planet_name_key; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
 --
 
@@ -481,5 +468,38 @@ ALTER TABLE ONLY public.star
 
 
 --
+-- Name: orbit unique_name; Type: CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.orbit
+    ADD CONSTRAINT unique_name UNIQUE (name);
+
+
+--
+-- Name: star galaxy_id; Type: FK CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.star
+    ADD CONSTRAINT galaxy_id FOREIGN KEY (galaxy_id) REFERENCES public.galaxy(galaxy_id);
+
+
+--
+-- Name: moon planet_id; Type: FK CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.moon
+    ADD CONSTRAINT planet_id FOREIGN KEY (planet_id) REFERENCES public.planet(planet_id);
+
+
+--
+-- Name: planet star_id; Type: FK CONSTRAINT; Schema: public; Owner: freecodecamp
+--
+
+ALTER TABLE ONLY public.planet
+    ADD CONSTRAINT star_id FOREIGN KEY (star_id) REFERENCES public.star(star_id);
+
+
+--
 -- PostgreSQL database dump complete
 --
+
